@@ -1,7 +1,7 @@
 {
-  "name": "seng-disposable-manager",
-  "version": "1.0.3",
-  "description": "Utility class for cleaning up various destructible things like timeouts, disposable instances and whatever you want to add.",
+  "name": "seng-disposable-event-listener",
+  "version": "1.0.0",
+  "description": "The DisposableEventListener is a wrapper around the native addEventListener method, which makes it easier to remove the handlers. By destructing this object, the listener is removed",
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
@@ -50,14 +50,14 @@
     "seng",
     "mediamonks",
     "boilerplate",
-    "seng-disposable-manager"
+    "seng-disposable-event-listener"
   ],
   "bugs": {
-    "url": "https://github.com/riccomediamonks/seng-disposable-manager/issues"
+    "url": "https://github.com/riccomediamonks/seng-disposable-event-listener/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/riccomediamonks/seng-disposable-manager.git"
+    "url": "https://github.com/riccomediamonks/seng-disposable-event-listener.git"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.35",
