@@ -1,5 +1,9 @@
-import Disposable from 'seng-disposable';
-import { EventHandler } from 'seng-event/lib/EventDispatcher';
+export type Listener = EventListenerOrEventListenerObject;
+
+export interface EventDispatcher {
+  addEventListener(type: string, listener: Listener, useCapture?: boolean): void;
+  removeEventListener(type: string, listener: Listener, useCapture?: boolean): void;
+}
 
 /**
  * The DisposableEventListener is a wrapper around the native addEventListener method,
@@ -17,18 +21,15 @@ import { EventHandler } from 'seng-event/lib/EventDispatcher';
  * @class DisposableEventListener
  */
 
-export default class DisposableEventListener extends Disposable {
-  public eventDispatcher;
-  public type: string;
-  public listener: EventListenerOrEventListenerObject | EventHandler;
-  public useCapture?: boolean;
+export default class DisposableEventListener {
+  private disposed = false;
 
   /**
    * Add an event listener on a HTML element.
    *
-   * @param {NativeEventDispatcher} eventDispatcher the HTML element to listen to.
+   * @param {EventDispatcher} eventDispatcher the HTML element to listen to.
    * @param {string} type the type of event to listen to.
-   * @param {EventListener} listener the method which is called when the eventDispatcher dispatches an event to the
+   * @param {Listener} listener the method which is called when the eventDispatcher dispatches an event to the
    * specified type
    * @param {boolean} useCapture If true, useCapture indicates that the user wishes to initiate capture. After
    * initiating capture, all events of the specified type will be dispatched to the registered listener before being
@@ -36,32 +37,27 @@ export default class DisposableEventListener extends Disposable {
    * not trigger a listener designated to use capture.
    */
   constructor(
-    eventDispatcher,
-    type: string,
-    listener: EventListenerOrEventListenerObject | EventHandler,
-    useCapture?: boolean,
+    public readonly eventDispatcher: EventDispatcher,
+    public readonly type: string,
+    public readonly listener: Listener,
+    public readonly useCapture?: boolean,
   ) {
-    super();
-
-    this.eventDispatcher = eventDispatcher;
-    this.type = type;
-    this.listener = listener;
-    this.useCapture = useCapture;
-
     eventDispatcher.addEventListener(type, listener, useCapture);
+  }
+
+  /**
+   * After {@link dispose} has been called, this method returns true.
+   * Use this method to determine whether dispose() should be run again.
+   */
+  public isDisposed(): boolean {
+    return this.disposed;
   }
 
   /**
    * Removes the event listener on the HTML element
    */
   public dispose(): void {
-    if (this.eventDispatcher && this.type && this.listener) {
-      this.eventDispatcher.removeEventListener(this.type, this.listener, this.useCapture);
-    }
-    this.eventDispatcher = null;
-    this.type = null;
-    this.listener = null;
-
-    super.dispose();
+    this.eventDispatcher.removeEventListener(this.type, this.listener, this.useCapture);
+    this.disposed = true;
   }
 }
