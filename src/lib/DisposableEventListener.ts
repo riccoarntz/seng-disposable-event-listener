@@ -22,6 +22,11 @@ export interface EventDispatcher {
  */
 
 export default class DisposableEventListener {
+  public readonly eventDispatcher: EventDispatcher;
+  public readonly type: string;
+  public readonly listener: Listener;
+  public readonly useCapture?: boolean;
+
   private disposed = false;
 
   /**
@@ -37,12 +42,17 @@ export default class DisposableEventListener {
    * not trigger a listener designated to use capture.
    */
   constructor(
-    public readonly eventDispatcher: EventDispatcher,
-    public readonly type: string,
-    public readonly listener: Listener,
-    public readonly useCapture?: boolean,
+    eventDispatcher: EventDispatcher,
+    type: string,
+    listener: Listener,
+    useCapture?: boolean,
   ) {
-    eventDispatcher.addEventListener(type, listener, useCapture);
+    this.eventDispatcher = eventDispatcher;
+    this.type = type;
+    this.listener = listener;
+    this.useCapture = useCapture;
+
+    this.eventDispatcher.addEventListener(type, listener, useCapture);
   }
 
   /**
