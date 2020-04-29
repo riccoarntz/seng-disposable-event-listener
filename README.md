@@ -13,21 +13,21 @@ npm i -S seng-disposable-event-listener
 ```
 
 ## Usage
- 
+
 #### Constructing.
 ```
   const windowResizeListener:DisposableEventListener = new DisposableEventListener(
-    window, 
-    resize',
+    window,
+    'resize',
     this.handleResize.bind(this)
   );
-``` 
+```
 
 #### Disposing
 
 ```
   windowResizeListener.dispose();
-``` 
+```
 
 
 ## Building
