@@ -1,9 +1,6 @@
-export type Listener = EventListenerOrEventListenerObject;
+export type EventDispatcher = Pick<Element, 'addEventListener' | 'removeEventListener'>;
 
-export interface EventDispatcher {
-  addEventListener(type: string, listener: Listener, useCapture?: boolean): void;
-  removeEventListener(type: string, listener: Listener, useCapture?: boolean): void;
-}
+type AddEventListenerParameters = Parameters<EventDispatcher['addEventListener']>;
 
 /**
  * The DisposableEventListener is a wrapper around the native addEventListener method,
@@ -23,9 +20,9 @@ export interface EventDispatcher {
 
 export default class DisposableEventListener {
   public readonly eventDispatcher: EventDispatcher;
-  public readonly type: string;
-  public readonly listener: Listener;
-  public readonly useCapture?: boolean;
+  public readonly type: AddEventListenerParameters[0];
+  public readonly listener: AddEventListenerParameters[1];
+  public readonly options?: AddEventListenerParameters[2];
 
   private disposed = false;
 
@@ -34,25 +31,25 @@ export default class DisposableEventListener {
    *
    * @param {EventDispatcher} eventDispatcher the HTML element to listen to.
    * @param {string} type the type of event to listen to.
-   * @param {Listener} listener the method which is called when the eventDispatcher dispatches an event to the
+   * @param {Function} listener the method which is called when the eventDispatcher dispatches an event to the
    * specified type
-   * @param {boolean} useCapture If true, useCapture indicates that the user wishes to initiate capture. After
+   * @param {boolean | EventListenerOptions} options If true, useCapture indicates that the user wishes to initiate capture. After
    * initiating capture, all events of the specified type will be dispatched to the registered listener before being
    * dispatched to any EventTarget beneath it in the DOM tree. Events which are bubbling upward through the tree will
    * not trigger a listener designated to use capture.
    */
   constructor(
     eventDispatcher: EventDispatcher,
-    type: string,
-    listener: Listener,
-    useCapture?: boolean,
+    type: AddEventListenerParameters[0],
+    listener: AddEventListenerParameters[1],
+    options?: AddEventListenerParameters[2],
   ) {
     this.eventDispatcher = eventDispatcher;
     this.type = type;
     this.listener = listener;
-    this.useCapture = useCapture;
+    this.options = options;
 
-    this.eventDispatcher.addEventListener(type, listener, useCapture);
+    this.eventDispatcher.addEventListener(type, listener, options);
   }
 
   /**
@@ -67,7 +64,7 @@ export default class DisposableEventListener {
    * Removes the event listener on the HTML element
    */
   public dispose(): void {
-    this.eventDispatcher.removeEventListener(this.type, this.listener, this.useCapture);
+    this.eventDispatcher.removeEventListener(this.type, this.listener, this.options);
     this.disposed = true;
   }
 }
