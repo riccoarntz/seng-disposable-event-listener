@@ -1,6 +1,6 @@
 import {use, expect} from 'chai';
 import {spy} from 'sinon';
-import {DisposableEventListener} from '../src';
+import {addEventListener} from '../src';
 import sinonChai from 'sinon-chai';
 import EventDispatcher, {AbstractEvent} from "seng-event";
 use(sinonChai);
@@ -11,14 +11,13 @@ describe('DisposableEventListener', () => {
     const div = document.createElement('div');
     const handler = spy();
 
-    const disposableEventListener = new DisposableEventListener(div, 'type', handler);
+    const disposableEventListener = addEventListener(div, 'type', handler);
 
     div.dispatchEvent(new Event('type'));
-    disposableEventListener.dispose();
+    disposableEventListener();
     div.dispatchEvent(new Event('type'));
 
     expect(handler).calledOnce;
-    expect(disposableEventListener.isDisposed()).to.equal(true)
   });
 });
 
@@ -35,13 +34,12 @@ describe('seng-event compatibility', () => {
     const eventDispatcher = new EventDispatcher();
     const handler = spy();
 
-    const disposableEventListener = new DisposableEventListener(eventDispatcher, 'type', handler);
+    const disposableEventListener = addEventListener(eventDispatcher, 'type', handler);
 
     eventDispatcher.dispatchEvent(new BasicEvent('type'));
-    disposableEventListener.dispose();
+    disposableEventListener();
     eventDispatcher.dispatchEvent(new BasicEvent('type'));
 
     expect(handler).calledOnce;
-    expect(disposableEventListener.isDisposed()).to.equal(true)
   });
 });

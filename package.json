@@ -1,7 +1,7 @@
 {
   "name": "seng-disposable-event-listener",
-  "version": "1.0.3",
-  "description": "The DisposableEventListener is a wrapper around the native addEventListener method, which makes it easier to remove the handlers. By destructing this object, the listener is removed",
+  "version": "2.0.1",
+  "description": "The DisposableEventListener is a wrapper around the native addEventListener method, which makes it easier to remove the handlers. By calling the returning function, the listener is removed",
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
