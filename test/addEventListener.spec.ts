@@ -5,16 +5,16 @@ import sinonChai from 'sinon-chai';
 import EventDispatcher, {AbstractEvent} from "seng-event";
 use(sinonChai);
 
-describe('DisposableEventListener', () => {
-  it('handler should be removed after disposing DisposableEventListener', () => {
+describe('addEventListener', () => {
+  it('handler should be removed after disposing the listener', () => {
 
     const div = document.createElement('div');
     const handler = spy();
 
-    const disposableEventListener = addEventListener(div, 'type', handler);
+    const listener = addEventListener(div, 'type', handler);
 
     div.dispatchEvent(new Event('type'));
-    disposableEventListener();
+    listener();
     div.dispatchEvent(new Event('type'));
 
     expect(handler).calledOnce;
@@ -23,7 +23,7 @@ describe('DisposableEventListener', () => {
 
 
 describe('seng-event compatibility', () => {
-  it('should be possible to use the EventDispatcher from seng-event with DisposableEventListener', () => {
+  it('should be possible to use the EventDispatcher from seng-event with addEventListener', () => {
 
     class BasicEvent extends AbstractEvent {
       public clone(): BasicEvent {
@@ -34,10 +34,10 @@ describe('seng-event compatibility', () => {
     const eventDispatcher = new EventDispatcher();
     const handler = spy();
 
-    const disposableEventListener = addEventListener(eventDispatcher, 'type', handler);
+    const listener = addEventListener(eventDispatcher, 'type', handler);
 
     eventDispatcher.dispatchEvent(new BasicEvent('type'));
-    disposableEventListener();
+    listener();
     eventDispatcher.dispatchEvent(new BasicEvent('type'));
 
     expect(handler).calledOnce;
