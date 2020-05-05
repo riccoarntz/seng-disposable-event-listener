@@ -1,10 +1,10 @@
-import DisposableEventListener from '../../src/lib/DisposableEventListener';
+import addEventListener from '../../src/lib/addEventListener';
 
 export default class App {
   private element: HTMLElement;
   private addButton: HTMLElement;
   private disposeButton: HTMLElement;
-  private windowResizeListener: DisposableEventListener;
+  private windowResizeListener: () => void;
   private resizeText:HTMLElement;
   private helpText:HTMLElement;
 
@@ -32,7 +32,7 @@ export default class App {
   private handleAddButtonClick(): void {
     this.helpText.style.display = 'block';
     this.addButton.style.display = 'none';
-    this.windowResizeListener = new DisposableEventListener(window, 'resize', this.handleWindowResize.bind(this));
+    this.windowResizeListener = addEventListener(window, 'resize', this.handleWindowResize.bind(this));
   }
 
   /**
@@ -56,7 +56,7 @@ export default class App {
     this.addButton.style.display = 'inline-block';
 
     if (this.windowResizeListener) {
-      this.windowResizeListener.dispose();
+      this.windowResizeListener();
       this.windowResizeListener = null;
     }
   }
