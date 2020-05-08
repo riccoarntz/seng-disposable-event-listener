@@ -1,5 +1,5 @@
 # seng-disposable-event-listener
-The DisposableEventListener is a wrapper around the native addEventListener method, which makes it easier to remove the handlers. By destructing this object, the listener is removed
+The addEventListener is a wrapper around the native addEventListener method, which makes it easier to remove it. By calling this function, the listener is removed
 
 ## Installation
 ### yarn / npm
@@ -13,21 +13,21 @@ npm i -S seng-disposable-event-listener
 ```
 
 ## Usage
- 
+
 #### Constructing.
 ```
-  const windowResizeListener:DisposableEventListener = new DisposableEventListener(
-    window, 
+  const windowResizeListener = addEventListener(
+    window,
     resize',
     this.handleResize.bind(this)
   );
-``` 
+```
 
 #### Disposing
 
 ```
-  windowResizeListener.dispose();
-``` 
+  windowResizeListener();
+```
 
 
 ## Building

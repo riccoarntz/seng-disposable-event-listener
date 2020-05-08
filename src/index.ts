@@ -1,1 +1,1 @@
-export { default as DisposableEventListener } from './lib/DisposableEventListener';
+export { default as addEventListener } from './lib/addEventListener';
