@@ -19,6 +19,25 @@ describe('addEventListener', () => {
 
     expect(handler).calledOnce;
   });
+
+  it('should be possible to listen for KeyboardEvents', () => {
+
+    const input: HTMLInputElement = document.createElement('input');
+    const handler = spy() as (event: KeyboardEvent) => void;
+
+    const listener = addEventListener(input, 'keydown', handler);
+
+    addEventListener(input, 'keydown', function (event: KeyboardEvent) {
+      console.log('event', event, this);
+    });
+
+    input.dispatchEvent(new KeyboardEvent('keydown'));
+
+    listener();
+    input.dispatchEvent(new KeyboardEvent('keydown'));
+
+    expect(handler).calledOnce;
+  });
 });
 
 

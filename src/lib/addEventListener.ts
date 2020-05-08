@@ -1,12 +1,8 @@
-export type EventDispatcher = Pick<Element, 'addEventListener' | 'removeEventListener'>;
-
-type AddEventListenerParameters = Parameters<EventDispatcher['addEventListener']>;
-
 /**
  * Wrapper function around the native addEventListener method, which makes it easier to remove.
  * By calling the return function, the listener is removed.
  *
- * @param {EventDispatcher} eventDispatcher the HTML element to listen to.
+ * @param {EventTarget} eventDispatcher the HTML element to listen to.
  * @param {string} type the type of event to listen to.
  * @param {Function} listener the method which is called when the eventDispatcher dispatches an event to the
  * specified type
@@ -24,16 +20,21 @@ type AddEventListenerParameters = Parameters<EventDispatcher['addEventListener']
  * resizeListener();
  * ```
  */
-function addEventListener(
-  eventDispatcher: EventDispatcher,
-  type: AddEventListenerParameters[0],
-  listener: AddEventListenerParameters[1],
-  options?: AddEventListenerParameters[2],
-): () => void {
-  eventDispatcher.addEventListener(type, listener, options);
+
+function addEventListener<K extends keyof WindowEventMap, T extends EventTarget>(
+  eventDispatcher: T,
+  type: K | string,
+  listener: (this: T, ev: WindowEventMap[K]) => any,
+  options?: boolean | AddEventListenerOptions,
+) {
+  eventDispatcher.addEventListener(type, listener as EventListenerOrEventListenerObject, options);
 
   return () => {
-    eventDispatcher.removeEventListener(type, listener, options);
+    eventDispatcher.removeEventListener(
+      type,
+      listener as EventListenerOrEventListenerObject,
+      options,
+    );
   };
 }
 

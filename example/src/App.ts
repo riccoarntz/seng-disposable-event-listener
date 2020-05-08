@@ -7,6 +7,8 @@ export default class App {
   private windowResizeListener: () => void;
   private resizeText:HTMLElement;
   private helpText:HTMLElement;
+  private input:HTMLInputElement;
+  private output:HTMLElement;
 
   constructor(element: HTMLElement) {
     this.element = element;
@@ -16,13 +18,20 @@ export default class App {
     this.disposeButton = <HTMLElement>this.element.querySelector('.js-button-dispose');
     this.resizeText = <HTMLElement>this.element.querySelector('.js-resize-text');
     this.helpText = <HTMLElement>this.element.querySelector('.js-help-text');
+    this.input = <HTMLInputElement>this.element.querySelector('input');
+    this.output = <HTMLElement>this.element.querySelector('#output');
 
     this.addEventListeners();
   }
 
   private addEventListeners() {
-    this.addButton.addEventListener('click', this.handleAddButtonClick.bind(this));
-    this.disposeButton.addEventListener('click', this.handleDisposeButtonClick.bind(this));
+    addEventListener(this.addButton,'click', this.handleAddButtonClick.bind(this));
+    addEventListener(this.disposeButton, 'click', this.handleDisposeButtonClick.bind(this));
+
+    addEventListener(this.input, 'keydown', (event: KeyboardEvent) => {
+      this.output.innerText = event.key;
+    })
+
   }
 
   /**
